@@ -3,7 +3,7 @@ const express = require("express");
 
 const app = express();
 
-app.use(express.json({ extended: false }));
+app.use(express.json());
 
 const nfts = JSON.parse(
     fs.readFileSync(`${__dirname}/nft-data/data/nft-simple.json`)
@@ -39,7 +39,25 @@ app.post("/api/v1/nfts", (req, res) => {
         })
     });
 
-    // res.send("Post my NFT");
+});
+
+// get single NFT
+app.get("/api/v1/nfts/:id", (req, res) => {
+    const id = req.params.id * 1;
+    const nft = nfts.find((el) => (el.id === id));
+
+    if(!nft) {
+        return res.status(404).json({
+            status: "Failed",
+            message: "Invalid request, ID"
+        })
+    }
+    res.status(200).json({
+        status: "success",
+        data: {
+            nft
+        }
+    })
 });
 
 const port = 3000;
