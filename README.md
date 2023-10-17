@@ -8,3 +8,4 @@ API for NFT Marketplace
 - delete and update nft
 - Middleware In Node Js | How To Create Custom Middleware 
 - User Router And Functions
+- MVC (Model-View-Controller) Architecture Node Js (next)
