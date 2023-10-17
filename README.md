@@ -11,3 +11,4 @@ API for NFT Marketplace
 - MVC (Model-View-Controller) Architecture Node Js 
 - Express Middleware | How To Create Express Customized Middleware, API Middleware In Express, Node Js 
 - Express Static File, Template, Folder & Data | How To use Express Js Static Website Template
+- Environment Variables | How To Create And Check Global Environment Variables | Node Js API .env File
