@@ -7,11 +7,16 @@ const {
     getSingleNFT,
     updateNFT,
     deleteNFT,
+    checkId,
+    checkBody
 } = require("./../controllers/nftControllers");
 
 const router = express.Router();
 
-router.route("/").get(getAllNFTs).post(createNFT);
+// Custom Middleware
+router.param("id", checkId);
+
+router.route("/").get(getAllNFTs).post(checkBody, createNFT);
 router
     .route("/:id")
     .get(getSingleNFT)
