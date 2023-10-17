@@ -7,3 +7,4 @@ API for NFT Marketplace
 - get single nft
 - delete and update nft
 - Middleware In Node Js | How To Create Custom Middleware 
+- User Router And Functions
