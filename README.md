@@ -2,6 +2,12 @@
 
 API for NFT Marketplace
 
+# Built in
+
+MongoDB, JavaScript, MVC
+
+# Main functionalaties
+
 - get
 - post
 - get single nft
@@ -16,3 +22,19 @@ API for NFT Marketplace
 - Connecting MongoDB Database Atlas | How To Connect MongoDB Atlas Cloud Database To NFT API 
 - Refactoring API Function, GetAllNFT, CreateNFT, GetSingleNFT, UpdateNFT, DeleteNFT
 - Mongoose Schema Model | How To Build Mongoose Schema Model For NFT API Data | NFT Marketplace API
+- Deploying Script For Demo NFT Data | Create Custom Deploying Script To Upload NFT Data To Database
+- ...
+- ...
+- ...
+- ...
+- ...
+- ...
+- ...
+- ...
+
+# Import cmds
+
+````
+node nft-data/data/import-data.js --import
+node nft-data/data/import-data.js --delete
+````
