@@ -22,7 +22,7 @@ const nfts = JSON.parse(
 );
 
 //IMPORT DATA
-const importDate = async () => {
+const importData = async () => {
   try {
     await NFT.create(nfts);
     console.log("DATA successfully Loaded");
@@ -44,7 +44,7 @@ const deleteData = async () => {
 };
 
 if (process.argv[2] === "--import") {
-  importDate();
+  importData();
 } else if (process.argv[2] === "--delete") {
   deleteData();
 }
