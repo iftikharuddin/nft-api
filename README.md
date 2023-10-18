@@ -13,4 +13,6 @@ API for NFT Marketplace
 - Express Static File, Template, Folder & Data | How To use Express Js Static Website Template
 - Environment Variables | How To Create And Check Global Environment Variables | Node Js API .env File
 - Complete MongoDB Tutorial | How To Write Date To MongoDB Database | MongoDB Compass Setup
-- Connecting MongoDB Database Atlas | How To Connect MongoDB Atlas Cloud Database To NFT API [IP]
+- Connecting MongoDB Database Atlas | How To Connect MongoDB Atlas Cloud Database To NFT API 
+- Refactoring API Function, GetAllNFT, CreateNFT, GetSingleNFT, UpdateNFT, DeleteNFT
+- Mongoose Schema Model | How To Build Mongoose Schema Model For NFT API Data | NFT Marketplace API

@@ -14,9 +14,10 @@ const {
 const router = express.Router();
 
 // Custom Middleware
-router.param("id", checkId);
+// router.param("id");
 
-router.route("/").get(getAllNFTs).post(checkBody, createNFT);
+// router.route("/").get(getAllNFTs).post(checkBody, createNFT);
+router.route("/").get(getAllNFTs).post(createNFT);
 router
     .route("/:id")
     .get(getSingleNFT)
