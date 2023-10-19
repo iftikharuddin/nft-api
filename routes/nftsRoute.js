@@ -8,13 +8,19 @@ const {
     updateNFT,
     deleteNFT,
     checkId,
-    checkBody
+    checkBody,
+    aliasTopNFTs
 } = require("./../controllers/nftControllers");
 
 const router = express.Router();
 
 // Custom Middleware
 // router.param("id");
+
+//TOP 5 NFTs BY PRICE
+router
+    .route("/top-5-nfts")
+    .get(aliasTopNFTs, getAllNFTs);
 
 // router.route("/").get(getAllNFTs).post(checkBody, createNFT);
 router.route("/").get(getAllNFTs).post(createNFT);
