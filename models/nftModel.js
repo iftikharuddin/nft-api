@@ -80,6 +80,7 @@ const nftSchema = new mongoose.Schema(
     }
 );
 
+// This is virtual, so it's not stored in Database
 nftSchema.virtual("durationWeeks").get(function () {
     return this.duration / 7;
 });
