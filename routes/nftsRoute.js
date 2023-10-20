@@ -10,7 +10,8 @@ const {
     checkId,
     checkBody,
     aliasTopNFTs,
-    getNFTsStats
+    getNFTsStats,
+    getMonthlyPlan
 } = require("./../controllers/nftControllers");
 
 const router = express.Router();
@@ -25,6 +26,9 @@ router
 
 //STATS ROUTE
 router.route("/nfts-stats").get(getNFTsStats);
+
+//GET MONTHLY PLAN
+router.route("/monthly-plan/:year").get(getMonthlyPlan);
 
 // router.route("/").get(getAllNFTs).post(checkBody, createNFT);
 router.route("/").get(getAllNFTs).post(createNFT);
