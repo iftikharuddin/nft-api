@@ -13,7 +13,7 @@ const nftSchema = new mongoose.Schema(
             minlength: [10, "nft must have 10 character"],
             // validate: [validator.isAlpha, "NFT name must only contain Characters"],
         },
-        slug: String,
+        slug: String, // this is for slug generation on save/create pre hook
         duration: {
             type: String,
             required: [true, "must provide duration"],
@@ -87,9 +87,8 @@ nftSchema.virtual("durationWeeks").get(function () {
 
 //MONGOOSE MIDDLEWARE
 
-//DOCUMNT MIDDLEWARE: runs before .save() or .create()
+//Document MIDDLEWARE: runs before .save() or .create()
 nftSchema.pre("save", function (next) {
-    // console.log(this);
     this.slug = slugify(this.name, { lower: true });
     next();
 });
