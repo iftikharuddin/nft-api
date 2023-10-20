@@ -127,7 +127,7 @@ nftSchema.post(/^find/, function (doc, next) {
 
 //AGGREATION MIDDLEWARE
 nftSchema.pre("aggregate", function (next) {
-    this.pipeline().unshift({ $match: { secretNfts: { $ne: true } } });
+    this.pipeline().unshift({ $match: { secretNfts: { $ne: true } } }); // this says don't include secret NFTs in any response
     // console.log(this.pipeline());
     next();
 });

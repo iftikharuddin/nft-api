@@ -80,7 +80,7 @@ exports.updateNFT = async (req, res) => {
     try {
         const nft = await NFT.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
-            runValidators: true
+            runValidators: true // this tells the model to apply validation rules
         });
         res.status(200).json({
             status: "success",
