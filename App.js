@@ -31,4 +31,13 @@ app.use((req, res, next) => {
 app.use("/api/v1/nfts", nftsRouter);
 app.use("/api/v1/users", usersRouter);
 
+// Error handling globally
+// note: this should be at bottom ( cuz code executes from top to bottom )
+app.all("*", (req, res) => {
+    res.status(404).json({
+        status: "failed",
+        message: `Can't find ${req.originalUrl} on this server`,
+    });
+});
+
 module.exports = app;
