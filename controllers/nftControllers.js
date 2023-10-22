@@ -1,6 +1,7 @@
 const NFT = require("../models/nftModel");
 const APIFeatures = require("./../Utils/apiFeatures");
 const catchAsync = require("./../Utils/catchAsync");
+const AppError = require("./../Utils/appError");
 
 // get top 5
 exports.aliasTopNFTs = (req, res, next) => {
@@ -11,7 +12,7 @@ exports.aliasTopNFTs = (req, res, next) => {
 };
 
 // get all nfts function
-exports.getAllNFTs = catchAsync(async (req, res) => {
+exports.getAllNFTs = catchAsync(async (req, res, next) => {
     const features = new APIFeatures(NFT.find(), req.query)
         .filter()
         .sort()
@@ -31,7 +32,7 @@ exports.getAllNFTs = catchAsync(async (req, res) => {
 });
 
 // Post method to create new NFT
-exports.createNFT = catchAsync(async (req, res) => {
+exports.createNFT = catchAsync(async (req, res, next) => {
 
     const newNFT = await NFT.create(req.body);
     res.status(201).json({
@@ -43,8 +44,13 @@ exports.createNFT = catchAsync(async (req, res) => {
 
 });
 
-exports.getSingleNFT = catchAsync(async (req, res) => {
+exports.getSingleNFT = catchAsync(async (req, res, next) => {
     const nft = await NFT.findById(req.params.id);
+
+    if(!nft) {
+        return next(new AppError("No NFT Found with this ID", 404));
+    }
+
     res.status(200).json({
         status: "success",
         data: {
@@ -53,11 +59,16 @@ exports.getSingleNFT = catchAsync(async (req, res) => {
     });
 });
 
-exports.updateNFT = catchAsync(async (req, res) => {
+exports.updateNFT = catchAsync(async (req, res, next) => {
     const nft = await NFT.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true // this tells the model to apply validation rules
     });
+
+    if(!nft) {
+        return next(new AppError("No NFT Found with this ID", 404));
+    }
+
     res.status(200).json({
         status: "success",
         data: {
@@ -66,8 +77,13 @@ exports.updateNFT = catchAsync(async (req, res) => {
     });
 });
 
-exports.deleteNFT = catchAsync(async (req, res) => {
-    await NFT.findByIdAndDelete(req.params.id);
+exports.deleteNFT = catchAsync(async (req, res, next) => {
+    const nft = await NFT.findByIdAndDelete(req.params.id);
+
+    if(!nft) {
+        return next(new AppError("No NFT Found with this ID", 404));
+    }
+
     res.status(204).json({
         status: "success",
         data: {
@@ -77,7 +93,7 @@ exports.deleteNFT = catchAsync(async (req, res) => {
 });
 
 //Aggregation Pipeline
-exports.getNFTsStats = catchAsync(async (req, res) => {
+exports.getNFTsStats = catchAsync(async (req, res, next) => {
     const stats = await NFT.aggregate([
         {
             $match: { ratingsAverage: { $gte: 4.5 } },
@@ -107,7 +123,7 @@ exports.getNFTsStats = catchAsync(async (req, res) => {
 });
 
 //CALCULATING NUMBER OF NFT CREATE IN THE MONTH OR MONTHLY PLAN
-exports.getMonthlyPlan = catchAsync(async (req, res) => {
+exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     const year = req.params.year * 1;
     const plan = await NFT.aggregate([
         {
