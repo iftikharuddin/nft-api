@@ -17,7 +17,6 @@ const {
 const router = express.Router();
 
 // Custom Middleware
-// router.param("id");
 
 //TOP 5 NFTs BY PRICE
 router
