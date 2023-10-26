@@ -15,9 +15,11 @@ mongoose.connect(DB, {
     console.log("Connected Successfully");
 });
 
-// console.log(process.env.NODE_ENV);
-
-
+process.on("unhandledRejection", (err) => {
+    console.log(err.name, err.message);
+    console.log("UnhandledRejection Shutting down application");
+    process.exit(1);
+});
 
 // const testNFT = new NFT({
 //     name: "My wild NFT",
