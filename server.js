@@ -15,26 +15,17 @@ mongoose.connect(DB, {
     console.log("Connected Successfully");
 });
 
+const port = process.env.PORT || 3000;
+
+const server = app.listen(port, ()=> {
+    console.log(`App running on port ${port} ....`)
+});
+
 process.on("unhandledRejection", (err) => {
     console.log(err.name, err.message);
     console.log("UnhandledRejection Shutting down application");
-    process.exit(1);
-});
+    server.close(() => {
+        process.exit(1);
+    });
 
-// const testNFT = new NFT({
-//     name: "My wild NFT",
-//     rating: 1,
-//     price: 12,
-// });
-//
-// testNFT.save().then(docNFT => {
-//     console.log(docNFT);
-// }).catch(error => {
-//     console.log("Error", error);
-// });
-
-const port = process.env.PORT || 3000;
-
-app.listen(port, ()=> {
-    console.log(`App running on port ${port} ....`)
 });
