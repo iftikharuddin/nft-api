@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema(
             required: [true, "Please provide your email"],
             unique: true,
             lowercase: true,
-            validate: [validator.isEmail, "Please provide a valid email"]
+            validate: [validator.isEmail, "Please provide a valid email"],
         },
         photo: {
             type: String,
@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: [true, "Please provide a password"],
             minlength: 8,
+            select: false // hide this from response
         },
         passwordConfirm: {
             type: String,
@@ -51,6 +52,14 @@ userSchema.pre("save", async function(next){
     next();
 
 });
+
+userSchema.methods.correctPassword = async function (
+    candidatePassword,
+    userPassword
+) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+};
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

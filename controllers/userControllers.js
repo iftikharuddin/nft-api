@@ -1,11 +1,21 @@
+const User = require("../models/userModel");
+const APIFeatures = require("./../Utils/apiFeatures");
+const catchAsync = require("./../Utils/catchAsync");
+const AppError = require("./../Utils/appError");
 
-// USERS Section
-exports.getAllUsers = (req, res) => {
-    // res.status(500).json({
-    //     status: "error",
-    //     message: "Internal server error"
-    // })
-};
+// Users Section
+exports.getAllUsers = catchAsync(async (req, res) => {
+    const users = await User.find();
+
+    res.status(200).json({
+        status: "success",
+        results: users.length,
+        data: {
+            users
+        }
+    });
+
+});
 
 exports.getSingeUser = (req, res) => {
     res.status(500).json({
