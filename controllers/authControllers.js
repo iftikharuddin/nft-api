@@ -3,6 +3,14 @@ const User = require("./../models/userModel");
 const catchAsync = require("./../Utils/catchAsync");
 const AppError = require("./../Utils/appError");
 
+// Create token
+const signToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN
+    });
+
+};
+
 // signup
 exports.signup = catchAsync( async (req, res, next ) => {
     // const newUser = await User.create(req.body); this will make everyone admin
@@ -13,9 +21,7 @@ exports.signup = catchAsync( async (req, res, next ) => {
         passwordConfirm: req.body.passwordConfirm
     });
 
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN
-    });
+    const token = signToken(newUser._id);
 
     res.status(200).json({
         status: "Success",
@@ -40,7 +46,8 @@ exports.login = catchAsync( async (req, res, next ) => {
     if(!user || !(await user.correctPassword(password, user.password))) {
         return next( new AppError("Incorrect email and password", 401));
     }
-    const token = "";
+
+    const token = signToken(user.id);
 
     res.status(200).json({
         status: "success",
