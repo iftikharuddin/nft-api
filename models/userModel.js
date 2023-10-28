@@ -29,10 +29,6 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: [true, "Please provide a confirm password"],
         }
-    },
-    {
-        toJSON: { virtuals: true },
-        toObject: { virtuals: true },
     }
 );
 
