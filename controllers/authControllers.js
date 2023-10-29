@@ -14,13 +14,13 @@ const signToken = (id) => {
 
 // signup
 exports.signup = catchAsync( async (req, res, next ) => {
-    // const newUser = await User.create(req.body); this will make everyone admin
-    const newUser = await User.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        passwordConfirm: req.body.passwordConfirm
-    });
+    const newUser = await User.create(req.body); //this will make everyone admin
+    // const newUser = await User.create({
+    //     name: req.body.name,
+    //     email: req.body.email,
+    //     password: req.body.password,
+    //     passwordConfirm: req.body.passwordConfirm
+    // });
 
     const token = signToken(newUser._id);
 
@@ -77,7 +77,13 @@ exports.protect = catchAsync( async (req, res, next ) => {
     }
 
     // change password
-    freshUser.changedPasswordAfter(decoded.iat);
+    if(freshUser.changedPasswordAfter(decoded.iat)) {
+        return next(
+            new AppError("User recently changed the password", 401)
+        )
+    };
 
+    // user will have access to protected data
+    req.user = freshUser;
     next();
 });
