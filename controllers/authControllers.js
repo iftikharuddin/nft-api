@@ -70,11 +70,14 @@ exports.protect = catchAsync( async (req, res, next ) => {
 
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-    const freshUser = await User.findOne(decoded.id);
+    const freshUser = await User.findById(decoded.id);
 
     if(!freshUser) {
         return next(AppError("The user belonging to this token doesn't exists", 401));
     }
+
+    // change password
+    freshUser.changedPasswordAfter(decoded.iat);
 
     next();
 });
