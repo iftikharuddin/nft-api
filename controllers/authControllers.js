@@ -98,3 +98,14 @@ exports.restrictTo =  (...roles ) => {
     }
     next();
 };
+
+
+// forget password
+exports.forgetPassword =  (req, res, next) => {
+
+};
+
+// reset password
+exports.resetPassword =  (req, res, next) => {
+
+};
