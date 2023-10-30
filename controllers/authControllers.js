@@ -76,8 +76,11 @@ exports.protect = catchAsync( async (req, res, next ) => {
         return next(AppError("The user belonging to this token doesn't exists", 401));
     }
 
+    console.log(freshUser);
+    console.log(await freshUser.changedPasswordAfter(decoded.iat));
+
     // change password
-    if(freshUser.changedPasswordAfter(decoded.iat)) {
+    if(await freshUser.changedPasswordAfter(decoded.iat)) {
         return next(
             new AppError("User recently changed the password", 401)
         )
@@ -87,3 +90,14 @@ exports.protect = catchAsync( async (req, res, next ) => {
     req.user = freshUser;
     next();
 });
+
+exports.restrictTo =  (...roles ) => {
+    return(req, res, next) => {
+        if(!roles.includes(req.user.role)) {
+            return next(
+                new AppError("You have no access to delete NFT", 403)
+            )
+        }
+    }
+    next();
+};
