@@ -6,9 +6,12 @@ const AppError = require("./../Utils/appError");
 exports.updateMe = catchAsync(async (req, res, next) => {
     // create error if updating password .. this is only for data updating
     if(req.body.password || req.body.passwordConfirm) {
-        return next(new AppError("This route is not for password update"));
+        return next(new AppError("This route is not for password update", 400));
     }
     // update user data
+    res.status(200).json({
+        status: "success"
+    })
 
 });
 // Users Section
