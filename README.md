@@ -60,7 +60,7 @@ MongoDB, JavaScript, MVC
 - Create User Roles In Our NFT Marketplace API | API Development Course For Beginner 2023
 - User Forgot Password API Features | NFT Marketplace API Development Course 2023
 - Sending Email | How To Send Email For API | NFT Marketplace API Development Course 2023
-- ...
+- Password Reset Functionality | Setting New Password | API Development Course 2023 For Beginner
 - ...
 
 # Import cmds

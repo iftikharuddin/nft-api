@@ -33,20 +33,27 @@ const userSchema = new mongoose.Schema(
         },
         passwordConfirm: {
             type: String,
-            required: [true, "Please provide a confirm password"],
-            validate: {
-                // this works only on create and save
-                validator: function(el) {
-                    return el === this.password // check for confirmPassword
-                },
-                message: "Password is not same"
-            }
+            // required: [true, "Please provide a confirm password"],
+            // validate: {
+            //     // this works only on create and save
+            //     validator: function(el) {
+            //         return el === this.password // check for confirmPassword
+            //     },
+            //     message: "Password is not same"
+            // }
         },
         passwordChangedAt: Date,
         passwordResetToken: String,
         passwordResetExpires: Date
     }
 );
+userSchema.pre("save", function(next) {
+
+    if (!this.isModified("password") || this.isNew) return next(); // if someone is updating/editing just pass
+
+    this.passwordChangedAt = Date.now() - 1000;
+
+});
 
 userSchema.pre("save", async function(next){
 

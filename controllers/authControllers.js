@@ -4,6 +4,7 @@ const User = require("./../models/userModel");
 const catchAsync = require("./../Utils/catchAsync");
 const AppError = require("./../Utils/appError");
 const sendEmail = require("./../Utils/email");
+const crypto = require("crypto");
 
 // Create token
 const signToken = (id) => {
@@ -119,7 +120,7 @@ exports.forgotPassword =  catchAsync(async(req, res, next) => {
     const message = `Did you forget your password? Submit a PATCH Request with your new password and confirm password t0: ${resetURL}.\n If you didn't forget your password please ignore this message`;
     try {
         await sendEmail({
-            emai: user.email,
+            email: user.email,
             subject: "Your Password Reset Token",
             message,
         });
@@ -132,11 +133,36 @@ exports.forgotPassword =  catchAsync(async(req, res, next) => {
         (user.passwordResetToken = undefined);
         (user.passwordResetExpires = undefined);
         await user.save({validationBeforeSave: false});
+        console.log(e);
         return next(new AppError("Error while sending an email, Try again", 500));
     }
 });
 
 // reset password
 exports.resetPassword =  catchAsync(async (req, res, next) => {
+    // get user on token
+    const hashedToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
+    const user = await User.findOne({
+        passwordResetToken: hashedToken,
+        passwordResetExpires: {$gt: Date.now()}
+    });
 
+    if(!user) {
+        return next(new AppError("Token is invalid or has expired", 400))
+    }
+
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+
+    await user.update({validationBeforeSave: false});
+
+    console.log(user);
+    const token = signToken(user.id);
+
+    res.status(200).json({
+        status: "Success",
+        token,
+    })
 });
