@@ -101,11 +101,15 @@ exports.restrictTo =  (...roles ) => {
 
 
 // forget password
-exports.forgetPassword =  (req, res, next) => {
+exports.forgotPassword =  catchAsync(async(req, res, next) => {
+    // get user email
 
-};
+    // create a random token
+
+    // send email for verification
+});
 
 // reset password
-exports.resetPassword =  (req, res, next) => {
+exports.resetPassword =  catchAsync(async (req, res, next) => {
 
-};
+});
