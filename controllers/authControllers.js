@@ -5,6 +5,7 @@ const catchAsync = require("./../Utils/catchAsync");
 const AppError = require("./../Utils/appError");
 const sendEmail = require("./../Utils/email");
 const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
 
 // Create token
 const signToken = (id) => {
@@ -14,25 +15,21 @@ const signToken = (id) => {
 
 };
 
-// signup
-exports.signup = catchAsync( async (req, res, next ) => {
-    const newUser = await User.create(req.body); //this will make everyone admin
-    // const newUser = await User.create({
-    //     name: req.body.name,
-    //     email: req.body.email,
-    //     password: req.body.password,
-    //     passwordConfirm: req.body.passwordConfirm
-    // });
-
-    const token = signToken(newUser._id);
-
-    res.status(200).json({
+const createSendToken = (user, statusCode, res) => {
+    const token = signToken(user._id);
+    res.status(statusCode).json({
         status: "Success",
         token,
         data: {
-            user: newUser
+            user: user
         }
     })
+};
+
+// signup
+exports.signup = catchAsync( async (req, res, next ) => {
+    const newUser = await User.create(req.body); //this will make everyone admin
+    createSendToken(newUser, 200, res);
 });
 
 // login
@@ -49,13 +46,7 @@ exports.login = catchAsync( async (req, res, next ) => {
     if(!user || !(await user.correctPassword(password, user.password))) {
         return next( new AppError("Incorrect email and password", 401));
     }
-
-    const token = signToken(user.id);
-
-    res.status(200).json({
-        status: "success",
-        token
-    })
+    createSendToken(user, 200, res);
 
 });
 
@@ -156,13 +147,38 @@ exports.resetPassword =  catchAsync(async (req, res, next) => {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
 
-    await user.update({validationBeforeSave: false});
+    await user.update({validationBeforeSave: false}); // @audit should it be save or update?
 
-    console.log(user);
-    const token = signToken(user.id);
+    createSendToken(user, 200, res);
+});
 
-    res.status(200).json({
-        status: "Success",
-        token,
-    })
+// Updating the password
+exports.updatedPassword = catchAsync(async (req, res, next) => {
+    // get user from collection of data
+    const user = await User.findById(req.user.id).select("+password");
+    // check if the user current password is correct
+    if(!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+        return next(new AppError("Your current password is wrong", 401));
+    }
+    // updating the password
+    // user.password = req.body.password;
+    // user.passwordConfirm = req.body.passwordConfirm;
+    const newPass = await bcrypt.hash(req.body.password, 12); // hash the password
+    const newConfirmPass = await bcrypt.hash(req.body.passwordConfirm, 12); // hash the password
+
+    const newUser = await User.updateOne(
+        { _id: user.id }, // Filter by _id
+        {
+            $set: {
+                password: newPass,
+                passwordConfirm: newConfirmPass,
+            },
+        }
+    );
+
+    console.log(`Updated: ${newUser}`);
+    //await user.save({validationBeforeSave: false}); // @audit should it be save or update?
+
+    // log user
+    createSendToken(newUser, 200, res);
 });

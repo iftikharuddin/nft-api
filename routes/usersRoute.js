@@ -10,6 +10,8 @@ router.post("/signup", authControllers.signup);
 router.post("/forgotPassword", authControllers.forgotPassword);
 router.patch("/resetPassword/:token", authControllers.resetPassword);
 
+router.patch("/updateMyPassword", authControllers.protect, authControllers.updatedPassword);
+
 // Router Users
 router.route("/").get(userControllers.getAllUsers).post(userControllers.createUser);
 router
