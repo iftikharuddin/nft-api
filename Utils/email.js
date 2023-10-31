@@ -10,7 +10,8 @@ const sendEmail = async (options) => {
     //         pass: process.env.EMAIL_PASSWORD
     //     }
     // });
-
+    
+    // Fake SMTP, for PROD do change and move sensitive data to ENV
     const transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
