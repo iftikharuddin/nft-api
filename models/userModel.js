@@ -62,7 +62,7 @@ userSchema.pre("save", function(next) {
 
 // only get active users, not soft deleted users
 userSchema.pre(/^find/, function(next) {
-   this.find({active: true});
+   this.find({active: { $ne: false }});
    next();
 });
 
