@@ -60,6 +60,12 @@ userSchema.pre("save", function(next) {
 
 });
 
+// only get active users, not soft deleted users
+userSchema.pre(/^find/, function(next) {
+   this.find({active: true});
+   next();
+});
+
 userSchema.pre("save", async function(next){
 
     if(!this.isModified("password")) return next(); // if someone is updating/editing just pass
