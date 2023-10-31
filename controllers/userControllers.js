@@ -3,6 +3,14 @@ const APIFeatures = require("./../Utils/apiFeatures");
 const catchAsync = require("./../Utils/catchAsync");
 const AppError = require("./../Utils/appError");
 
+exports.updateMe = catchAsync(async (req, res, next) => {
+    // create error if updating password .. this is only for data updating
+    if(req.body.password || req.body.passwordConfirm) {
+        return next(new AppError("This route is not for password update"));
+    }
+    // update user data
+
+});
 // Users Section
 exports.getAllUsers = catchAsync(async (req, res) => {
     const users = await User.find();
