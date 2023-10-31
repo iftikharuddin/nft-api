@@ -68,7 +68,14 @@ exports.updateUser = (req, res) => {
         message: "Internal server error"
     })
 };
-
+exports.deleteMe = catchAsync(async (req, res, next) => {
+    await User.findByIdAndUpdate(req.body.id, {active: false});
+    res.status(204).json({
+        status: "success",
+        data: null
+    });
+});
+// delete user ( onlyAdmin )
 exports.deleteUser = (req, res) => {
     res.status(500).json({
         status: "error",
