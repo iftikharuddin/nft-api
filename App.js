@@ -2,6 +2,7 @@ const fs = require("fs");
 const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
+const helmet = require('helmet');
 
 const AppError = require("./Utils/appError");
 const nftsRouter = require("./routes/nftsRoute");
@@ -10,7 +11,10 @@ const globalErrorHandler = require("./controllers/errorController");
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
+
+// secure header http
+app.use(helmet()); // middleware
 
 // global middleware
 const limiter = rateLimit({max: 100, window: 60 * 60 * 1000, message: "Too many request from this IP, try again in 1 hour"});
