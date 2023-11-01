@@ -5,7 +5,7 @@ const rateLimit = require("express-rate-limit");
 const helmet = require('helmet');
 const mongoSanitize = require("mongo-sanitize");
 const xss = require("xss-clean");
-
+const hpp = require("hpp");
 
 const AppError = require("./Utils/appError");
 const nftsRouter = require("./routes/nftsRoute");
@@ -21,6 +21,11 @@ app.use(mongoSanitize());
 
 // Data Sanitization against site script XSS
 app.use(xss());
+
+// prevent parameters pollution
+app.use(hpp({
+    whitelist: ["duration", "price", "difficulty"]
+}));
 
 // secure header http
 app.use(helmet()); // middleware
