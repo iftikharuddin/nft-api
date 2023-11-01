@@ -3,6 +3,9 @@ const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const helmet = require('helmet');
+const mongoSanitize = require("mongo-sanitize");
+const xss = require("xss-clean");
+
 
 const AppError = require("./Utils/appError");
 const nftsRouter = require("./routes/nftsRoute");
@@ -12,6 +15,12 @@ const globalErrorHandler = require("./controllers/errorController");
 const app = express();
 
 app.use(express.json({ limit: "10kb" }));
+
+// Data Sanitization against noSQL query injection
+app.use(mongoSanitize());
+
+// Data Sanitization against site script XSS
+app.use(xss());
 
 // secure header http
 app.use(helmet()); // middleware
